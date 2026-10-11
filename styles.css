@@ -383,6 +383,24 @@ a { color: var(--green); }
 
 a.showcase-item { text-decoration: none; }
 
+a.showcase-item::before {
+  content: attr(data-label);
+  position: absolute;
+  left: 1rem;
+  bottom: 0.9rem;
+  z-index: 2;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+a.showcase-item:hover::before { opacity: 1; }
+
 a.showcase-item::after {
   content: "";
   position: absolute;
