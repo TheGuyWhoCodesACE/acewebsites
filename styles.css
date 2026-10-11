@@ -548,6 +548,16 @@ details[open] .plus::after { transform: rotate(0deg); }
 .field { display: flex; flex-direction: column; gap: 0.35rem; }
 .field-full { grid-column: 1 / -1; }
 
+/* Honeypot: off-screen, not display:none (bots check for that) */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .quote-form label {
   font-size: 0.72rem;
   font-weight: 600;
