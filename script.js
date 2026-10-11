@@ -16,8 +16,6 @@ form.addEventListener("submit", async (event) => {
   const data = new FormData(form);
   const name = neutralize(data.get("name"));
   const email = neutralize(data.get("email"));
-  const budget = neutralize(data.get("budget"));
-  const timeline = neutralize(data.get("timeline"));
   const message = neutralize(data.get("message"));
 
   if (!name || !email || !message) {
@@ -35,8 +33,6 @@ form.addEventListener("submit", async (event) => {
     "**New quote request**",
     `**Name:** ${name}`,
     `**Email:** ${email}`,
-    `**Budget:** ${budget}`,
-    `**Timeline:** ${timeline}`,
     `**Need:** ${message}`,
   ];
 
@@ -81,30 +77,6 @@ if ("IntersectionObserver" in window && !reduceMotion) {
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
 }
 
-/* Count-up on stats */
-
-if ("IntersectionObserver" in window && !reduceMotion) {
-  const countIo = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        countIo.unobserve(entry.target);
-        const target = Number(entry.target.dataset.count);
-        const start = performance.now();
-        const tick = (now) => {
-          const t = Math.min((now - start) / 650, 1);
-          const eased = 1 - Math.pow(1 - t, 3);
-          entry.target.textContent = String(Math.round(target * eased));
-          if (t < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }
-    },
-    { threshold: 0.6 }
-  );
-  document.querySelectorAll(".stat-num[data-count]").forEach((el) => countIo.observe(el));
-}
-
 /* FAQ: only one open at a time */
 
 const faqs = document.querySelectorAll(".faq details");
@@ -116,17 +88,3 @@ faqs.forEach((d) => {
     });
   });
 });
-
-/* Local time in footer */
-
-const timeEl = document.getElementById("local-time");
-
-function updateTime() {
-  timeEl.textContent = new Date().toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
-updateTime();
-setInterval(updateTime, 30_000);
