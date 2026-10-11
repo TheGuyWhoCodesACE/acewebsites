@@ -218,12 +218,38 @@
         budget range if you have one. Replies go out within two business days.
       </p>
       <div class="contact-panel">
+        <form id="quote-form" class="quote-form" novalidate>
+          <div class="field">
+            <label for="q-name">Name</label>
+            <input id="q-name" name="name" type="text" required autocomplete="name" placeholder="Jane Smith">
+          </div>
+          <div class="field">
+            <label for="q-email">Email</label>
+            <input id="q-email" name="email" type="email" required autocomplete="email" placeholder="jane@example.com">
+          </div>
+          <div class="field">
+            <label for="q-budget">Budget range</label>
+            <select id="q-budget" name="budget">
+              <option>Not sure yet</option>
+              <option>Under $600</option>
+              <option>$600 – $1,800</option>
+              <option>Over $1,800</option>
+            </select>
+          </div>
+          <div class="field field-full">
+            <label for="q-message">What do you need?</label>
+            <textarea id="q-message" name="message" rows="4" required placeholder="A five-page site for my bakery, needed by March."></textarea>
+          </div>
+          <div class="form-footer field-full">
+            <button class="button" type="submit">Request a quote</button>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
         <div class="contact-rows">
           <div><span class="k">Email</span><a href="mailto:hello@acewebsites.com">hello@acewebsites.com</a></div>
           <div><span class="k">Hours</span>Monday–Friday, 9:00–17:00</div>
           <div><span class="k">Location</span>Remote</div>
         </div>
-        <a class="button" href="mailto:hello@acewebsites.com?subject=Website%20quote">Email us</a>
       </div>
     </section>
 
@@ -236,5 +262,6 @@
     </div>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,57 @@
+const WEBHOOK_URL =
+  "https://discord.com/api/webhooks/1558681690455412766/K0JxP4cnRwidjmOUa9HdBsvYCvBP15m4WCDlLtJT2trGNKCX9Jid5gOST6zwFhAXMBvP";
+
+const form = document.getElementById("quote-form");
+const status = document.getElementById("form-status");
+
+function neutralize(text) {
+  return String(text).replace(/@/g, "@\u200b").trim();
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const data = new FormData(form);
+  const name = neutralize(data.get("name"));
+  const email = neutralize(data.get("email"));
+  const budget = neutralize(data.get("budget"));
+  const message = neutralize(data.get("message"));
+
+  if (!name || !email || !message) {
+    status.textContent = "Please fill in name, email, and what you need.";
+    status.className = "form-status error";
+    return;
+  }
+
+  status.textContent = "Sending…";
+  status.className = "form-status";
+  const button = form.querySelector("button");
+  button.disabled = true;
+
+  const lines = [
+    "**New quote request**",
+    `**Name:** ${name}`,
+    `**Email:** ${email}`,
+    `**Budget:** ${budget}`,
+    `**Need:** ${message}`,
+  ];
+
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: lines.join("\n") }),
+    });
+
+    if (!res.ok) throw new Error(res.status);
+
+    status.textContent = "Sent. We reply within two business days.";
+    status.className = "form-status success";
+    form.reset();
+  } catch {
+    status.textContent = "Could not send. Email hello@acewebsites.com instead.";
+    status.className = "form-status error";
+  } finally {
+    button.disabled = false;
+  }
+});
