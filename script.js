@@ -56,27 +56,6 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-/* Reveal on scroll */
-
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-if ("IntersectionObserver" in window && !reduceMotion) {
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in");
-          io.unobserve(entry.target);
-        }
-      }
-    },
-    { threshold: 0.1, rootMargin: "0px 0px -32px" }
-  );
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-} else {
-  document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
-}
-
 /* FAQ: only one open at a time */
 
 const faqs = document.querySelectorAll(".faq details");
