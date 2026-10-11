@@ -1,7 +1,7 @@
 const WEBHOOK_URL =
   "https://discord.com/api/webhooks/1558681690455412766/K0JxP4cnRwidjmOUa9HdBsvYCvBP15m4WCDlLtJT2trGNKCX9Jid5gOST6zwFhAXMBvP";
 
-/* ---------- Quote form ---------- */
+/* Quote form → Discord webhook */
 
 const form = document.getElementById("quote-form");
 const status = document.getElementById("form-status");
@@ -60,7 +60,7 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-/* ---------- Reveal on scroll ---------- */
+/* Reveal on scroll */
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -74,16 +74,14 @@ if ("IntersectionObserver" in window && !reduceMotion) {
         }
       }
     },
-    { threshold: 0.12, rootMargin: "0px 0px -40px" }
+    { threshold: 0.1, rootMargin: "0px 0px -32px" }
   );
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 } else {
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
 }
 
-/* ---------- Count-up stats ---------- */
-
-const nums = document.querySelectorAll(".stat-num[data-count]");
+/* Count-up on stats */
 
 if ("IntersectionObserver" in window && !reduceMotion) {
   const countIo = new IntersectionObserver(
@@ -93,9 +91,8 @@ if ("IntersectionObserver" in window && !reduceMotion) {
         countIo.unobserve(entry.target);
         const target = Number(entry.target.dataset.count);
         const start = performance.now();
-        const dur = 700;
         const tick = (now) => {
-          const t = Math.min((now - start) / dur, 1);
+          const t = Math.min((now - start) / 650, 1);
           const eased = 1 - Math.pow(1 - t, 3);
           entry.target.textContent = String(Math.round(target * eased));
           if (t < 1) requestAnimationFrame(tick);
@@ -105,10 +102,10 @@ if ("IntersectionObserver" in window && !reduceMotion) {
     },
     { threshold: 0.6 }
   );
-  nums.forEach((el) => countIo.observe(el));
+  document.querySelectorAll(".stat-num[data-count]").forEach((el) => countIo.observe(el));
 }
 
-/* ---------- FAQ: close others ---------- */
+/* FAQ: only one open at a time */
 
 const faqs = document.querySelectorAll(".faq details");
 faqs.forEach((d) => {
@@ -120,7 +117,7 @@ faqs.forEach((d) => {
   });
 });
 
-/* ---------- Local time ---------- */
+/* Local time in footer */
 
 const timeEl = document.getElementById("local-time");
 
