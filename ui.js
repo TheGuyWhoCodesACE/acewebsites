@@ -36,6 +36,58 @@
   window.addEventListener("resize", updateScrollState);
   updateScrollState();
 
+  /* --- snappier in-page scrolling -------------------------------------- */
+
+  var scrollFrame = null;
+
+  function headerOffset() {
+    var h = document.querySelector(".site-header");
+    return (h ? h.offsetHeight : 0) + 14;
+  }
+
+  document.addEventListener("click", function (event) {
+    if (event.defaultPrevented || !event.target.closest) return;
+    var link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    var hash = link.getAttribute("href");
+    if (!hash || hash === "#") return;
+
+    var target = document.querySelector(hash);
+    if (!target) return;
+
+    event.preventDefault();
+
+    var startY = window.scrollY || document.documentElement.scrollTop || 0;
+    var endY = Math.max(0, target.getBoundingClientRect().top + startY - headerOffset());
+    var maxY = document.documentElement.scrollHeight - window.innerHeight;
+    if (endY > maxY) endY = maxY;
+
+    if (scrollFrame !== null) {
+      window.cancelAnimationFrame(scrollFrame);
+      scrollFrame = null;
+    }
+
+    if (reduceMotion.matches || Math.abs(endY - startY) < 2) {
+      window.scrollTo(0, endY);
+    } else {
+      var distance = Math.abs(endY - startY);
+      var duration = Math.min(650, Math.max(300, 300 + distance * 0.12));
+      var startTime = null;
+
+      var step = function (now) {
+        if (startTime === null) startTime = now;
+        var progress = Math.min((now - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        window.scrollTo(0, startY + (endY - startY) * eased);
+        scrollFrame = progress < 1 ? window.requestAnimationFrame(step) : null;
+      };
+      scrollFrame = window.requestAnimationFrame(step);
+    }
+
+    if (window.history.pushState) window.history.pushState(null, "", hash);
+  });
+
   /* --- scroll reveals -------------------------------------------------- */
 
   var GROUPS = [
@@ -132,5 +184,18 @@
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") setMenu(false);
     });
+  }
+
+  /* --- showcase: two-finger scroll stops the marquee ------------------- */
+
+  var showcase = document.querySelector(".showcase-wrap");
+  if (showcase) {
+    showcase.addEventListener(
+      "scroll",
+      function () {
+        showcase.classList.add("is-user-scrolled");
+      },
+      { passive: true }
+    );
   }
 })();

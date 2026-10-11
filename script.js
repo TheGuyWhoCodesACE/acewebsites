@@ -60,7 +60,7 @@ function screenSubmission(fields) {
   }
   for (const pattern of RULES.blockedPatterns) {
     if (pattern.test(message) || pattern.test(name)) {
-      return "Message filtered. Email hello@acewebsites.com directly instead.";
+      return "Message filtered. Email acewebsitesdesign@gmail.com directly instead.";
     }
   }
 
@@ -133,7 +133,7 @@ form.addEventListener("submit", async (event) => {
     status.className = "form-status success";
     form.reset();
   } catch {
-    status.textContent = "Could not send. Email hello@acewebsites.com instead.";
+    status.textContent = "Could not send. Email acewebsitesdesign@gmail.com instead.";
     status.className = "form-status error";
   } finally {
     button.disabled = false;
