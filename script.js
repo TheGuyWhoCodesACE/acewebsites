@@ -77,6 +77,25 @@ if ("IntersectionObserver" in window && !reduceMotion) {
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
 }
 
+/* Showcase previews: scale a 1440px-wide capture to fit each card */
+
+const PREVIEW_WIDTH = 1440;
+
+function fitPreviews() {
+  document.querySelectorAll(".thumb iframe").forEach((frame) => {
+    const thumb = frame.parentElement;
+    const chrome = thumb.querySelector(".chrome");
+    const chromeH = chrome ? chrome.offsetHeight : 0;
+    const scale = thumb.clientWidth / PREVIEW_WIDTH;
+    frame.style.transform = `scale(${scale})`;
+    frame.style.height = `${(thumb.clientHeight - chromeH) / scale}px`;
+  });
+}
+
+fitPreviews();
+window.addEventListener("resize", fitPreviews);
+window.addEventListener("load", fitPreviews);
+
 /* FAQ: only one open at a time */
 
 const faqs = document.querySelectorAll(".faq details");

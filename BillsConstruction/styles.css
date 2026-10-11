@@ -629,6 +629,11 @@ p { margin: 0 0 1rem; }
 
 .sample-bar a:hover { background: #ffc13b; }
 
+/* Hide sample bar + reclaim padding when embedded as a preview */
+
+html.framed .sample-bar { display: none; }
+html.framed body { padding-bottom: 0; }
+
 /* Responsive */
 
 @media (max-width: 900px) {
