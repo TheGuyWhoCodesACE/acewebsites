@@ -112,12 +112,6 @@ form.addEventListener("submit", async (event) => {
   const button = form.querySelector("button");
   button.disabled = true;
 
-  const lines = [
-    "**New quote request**",
-    `**Name:** ${name}`,
-    `**Email:** ${email}`,
-  ];
-
   const business = String(data.get("business") || "").trim();
   const kind = String(data.get("type") || "").trim();
   const plan = String(data.get("plan") || "");
@@ -133,19 +127,37 @@ form.addEventListener("submit", async (event) => {
     month: "Within a month",
   };
 
-  if (business) lines.push(`**Business:** ${neutralize(business).slice(0, 120)}`);
-  if (kind) lines.push(`**Industry:** ${neutralize(kind).slice(0, 120)}`);
-  if (plan && PLAN_LABELS[plan]) lines.push(`**Hosting:** ${PLAN_LABELS[plan]}`);
-  if (needed && NEEDED_LABELS[needed]) lines.push(`**Needed:** ${NEEDED_LABELS[needed]}`);
-  if (sample) lines.push(`**Sample-site discount:** yes — 10% off`);
+  const fields = [
+    { name: "Name", value: name, inline: true },
+    { name: "Email", value: email, inline: true },
+  ];
+  if (business) fields.push({ name: "Business", value: neutralize(business).slice(0, 120), inline: true });
+  if (kind) fields.push({ name: "Industry", value: neutralize(kind).slice(0, 120), inline: true });
+  if (plan && PLAN_LABELS[plan]) fields.push({ name: "Hosting", value: PLAN_LABELS[plan], inline: true });
+  if (needed && NEEDED_LABELS[needed]) fields.push({ name: "Needed by", value: NEEDED_LABELS[needed], inline: true });
+  if (sample) fields.push({ name: "Sample discount", value: "Yes — 10% off", inline: true });
+  fields.push({ name: "Project details", value: message, inline: false });
 
-  lines.push(`**Need:** ${message}`);
+  const payload = {
+    username: "ACE Websites",
+    // Never let field text trigger pings — @s are already neutralized.
+    allowed_mentions: { parse: [] },
+    embeds: [
+      {
+        title: "New quote request",
+        color: 0x1c5a48, // ACE green
+        fields,
+        timestamp: new Date().toISOString(),
+        footer: { text: "acewebsites.org" },
+      },
+    ],
+  };
 
   try {
     const res = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: lines.join("\n") }),
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) throw new Error(res.status);
