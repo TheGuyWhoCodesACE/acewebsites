@@ -201,9 +201,12 @@ a { color: var(--green); }
   border-radius: 6px;
   background: var(--green);
   color: var(--bg);
-  font-family: Georgia, serif;
-  font-weight: 700;
-  font-size: 0.85rem;
+}
+
+.brand-mark svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
 }
 
 .nav {
