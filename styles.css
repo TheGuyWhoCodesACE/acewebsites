@@ -158,6 +158,12 @@ a { color: var(--green); }
   border-bottom-color: var(--line-strong);
 }
 
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar { display: none; }
+
 .scroll-progress {
   position: absolute;
   left: 0;
