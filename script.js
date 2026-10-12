@@ -116,8 +116,30 @@ form.addEventListener("submit", async (event) => {
     "**New quote request**",
     `**Name:** ${name}`,
     `**Email:** ${email}`,
-    `**Need:** ${message}`,
   ];
+
+  const business = String(data.get("business") || "").trim();
+  const kind = String(data.get("type") || "").trim();
+  const plan = String(data.get("plan") || "");
+  const needed = String(data.get("needed") || "");
+  const sample = String(data.get("sample") || "");
+
+  const PLAN_LABELS = {
+    self: "I'll host the files myself ($1,000)",
+    managed: "ACE hosts it ($750 + $100/yr)",
+  };
+  const NEEDED_LABELS = {
+    week: "Within a week",
+    month: "Within a month",
+  };
+
+  if (business) lines.push(`**Business:** ${neutralize(business).slice(0, 120)}`);
+  if (kind) lines.push(`**Industry:** ${neutralize(kind).slice(0, 120)}`);
+  if (plan && PLAN_LABELS[plan]) lines.push(`**Hosting:** ${PLAN_LABELS[plan]}`);
+  if (needed && NEEDED_LABELS[needed]) lines.push(`**Needed:** ${NEEDED_LABELS[needed]}`);
+  if (sample) lines.push(`**Sample-site discount:** yes — 10% off`);
+
+  lines.push(`**Need:** ${message}`);
 
   try {
     const res = await fetch(WEBHOOK_URL, {

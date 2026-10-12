@@ -536,7 +536,7 @@ a { color: var(--green); }
 
 .showcase-wrap::-webkit-scrollbar { display: none; }
 
-.showcase-wrap.is-user-scrolled .showcase-track { animation: none; }
+.showcase-wrap.is-user-scrolled .showcase-track { animation-play-state: paused; }
 
 .showcase-track {
   display: flex;
@@ -718,8 +718,15 @@ details[open] .plus::after { transform: rotate(0deg); }
   color: var(--muted);
 }
 
+.quote-form .opt {
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+}
+
 .quote-form input,
-.quote-form textarea {
+.quote-form textarea,
+.quote-form select {
   font: inherit;
   font-size: 0.95rem;
   color: var(--ink);
@@ -733,7 +740,8 @@ details[open] .plus::after { transform: rotate(0deg); }
 .quote-form textarea { resize: vertical; }
 
 .quote-form input:focus,
-.quote-form textarea:focus {
+.quote-form textarea:focus,
+.quote-form select:focus {
   outline: none;
   border-color: var(--green);
   box-shadow: 0 0 0 3px var(--green-soft);
@@ -741,6 +749,30 @@ details[open] .plus::after { transform: rotate(0deg); }
 
 .quote-form input::placeholder,
 .quote-form textarea::placeholder { color: #a89e8e; }
+
+.quote-form input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  padding: 0;
+  accent-color: var(--green);
+  flex: none;
+  cursor: pointer;
+}
+
+.field-check label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.field-check input[type="checkbox"] { margin-top: 0.2rem; }
 
 .form-footer {
   display: flex;
@@ -910,10 +942,6 @@ details[open] .plus::after { transform: rotate(0deg); }
   }
 
   .showcase-wrap::-webkit-scrollbar { display: none; }
-
-  .showcase-track { animation: none; }
-
-  .showcase-set[aria-hidden="true"] { display: none; }
 
   .showcase-item {
     width: 78vw;

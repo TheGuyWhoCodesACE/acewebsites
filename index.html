@@ -279,9 +279,39 @@
             <label for="q-email">Email</label>
             <input id="q-email" name="email" type="email" required autocomplete="email" placeholder="jane@example.com">
           </div>
+          <div class="field">
+            <label for="q-biz">Business name <span class="opt">(optional)</span></label>
+            <input id="q-biz" name="business" type="text" autocomplete="organization" placeholder="Jane's Plumbing Co.">
+          </div>
+          <div class="field">
+            <label for="q-type">What's your business? <span class="opt">(optional)</span></label>
+            <input id="q-type" name="type" type="text" placeholder="e.g. plumber, bakery, law firm">
+          </div>
+          <div class="field">
+            <label for="q-plan">Hosting preference <span class="opt">(optional)</span></label>
+            <select id="q-plan" name="plan">
+              <option value="">Not sure yet</option>
+              <option value="self">I'll host the files myself — $1,000</option>
+              <option value="managed">ACE hosts it — $750 + $100/yr</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="q-needed">Needed by <span class="opt">(optional)</span></label>
+            <select id="q-needed" name="needed">
+              <option value="">No rush</option>
+              <option value="week">Within a week</option>
+              <option value="month">Within a month</option>
+            </select>
+          </div>
           <div class="field field-full">
             <label for="q-message">What do you need?</label>
             <textarea id="q-message" name="message" rows="4" required placeholder="A five-page site for my plumbing business, needed by March."></textarea>
+          </div>
+          <div class="field field-full field-check">
+            <label>
+              <input type="checkbox" name="sample" value="yes">
+              You can use my finished site as a sample on your website — 10% off
+            </label>
           </div>
           <div class="form-footer field-full">
             <button class="button" type="submit">Send request</button>
