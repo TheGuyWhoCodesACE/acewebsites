@@ -546,7 +546,7 @@ html::-webkit-scrollbar { display: none; }
   display: flex;
   gap: 1rem;
   width: max-content;
-  animation: showcase-scroll 68s linear infinite;
+  animation: showcase-scroll 112s linear infinite;
 }
 
 .showcase-wrap:hover .showcase-track,
