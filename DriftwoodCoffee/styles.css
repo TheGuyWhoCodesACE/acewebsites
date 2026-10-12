@@ -473,7 +473,11 @@ p { margin: 0 0 1rem; }
   padding-top: 0.2rem;
 }
 
-.visit-list dd { margin: 0; }
+.visit-list dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 .visit-list a { text-decoration: none; font-weight: 500; }
 .visit-list a:hover { text-decoration: underline; text-underline-offset: 3px; }

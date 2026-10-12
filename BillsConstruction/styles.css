@@ -506,7 +506,12 @@ p { margin: 0 0 1rem; }
   padding-top: 0.2rem;
 }
 
-.contact-list dd { margin: 0; font-weight: 500; }
+.contact-list dd {
+  margin: 0;
+  font-weight: 500;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 .contact-list a { text-decoration: none; font-weight: 600; }
 .contact-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
