@@ -191,6 +191,7 @@ a { color: var(--green); }
   letter-spacing: -0.015em;
   text-decoration: none;
   color: var(--ink);
+  white-space: nowrap;
 }
 
 .brand-mark {
@@ -238,6 +239,7 @@ a { color: var(--green); }
   color: var(--surface) !important;
   padding: 0.5rem 1rem;
   border-radius: var(--radius-control);
+  white-space: nowrap;
   transition: background 0.15s ease;
 }
 
@@ -880,6 +882,13 @@ details[open] .plus::after { transform: rotate(0deg); }
   .grid-3, .contact-rows { grid-template-columns: 1fr; }
   .quote-form { grid-template-columns: 1fr; }
   .steps li { grid-template-columns: 2rem 1fr; }
+}
+
+@media (max-width: 480px) {
+  .brand > span:last-child { display: none; }
+  .header-inner { gap: 0.75rem; }
+  .header-right { gap: 0.5rem; }
+  .nav-cta { padding: 0.5rem 0.8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
