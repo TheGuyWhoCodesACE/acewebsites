@@ -1,7 +1,7 @@
 /* ACE Websites — UI behaviour
-   Sticky-header state, scroll progress, one-shot reveals,
-   active nav link, mobile menu. No dependencies.
-   Everything degrades to a plain, fully visible page if this fails. */
+   Sticky-header state, scroll reveals, active nav link, mobile menu.
+   No dependencies. Everything degrades to a plain, fully visible page
+   if this fails. */
 
 (function () {
   "use strict";
@@ -10,17 +10,15 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  /* --- header state + scroll progress ---------------------------------- */
+  /* --- header state ---------------------------------------------------- */
 
   var header = document.querySelector(".site-header");
   var ticking = false;
 
   function updateScrollState() {
     var y = window.scrollY || document.documentElement.scrollTop || 0;
-    var max = document.documentElement.scrollHeight - window.innerHeight;
 
     header.classList.toggle("is-scrolled", y > 8);
-    header.style.setProperty("--p", max > 0 ? Math.min(y / max, 1) : 0);
     ticking = false;
   }
 
@@ -111,13 +109,14 @@
   });
 
   var revealables = document.querySelectorAll(".reveal");
+  var revealObserver = null;
 
   if (!("IntersectionObserver" in window) || reduceMotion.matches) {
     revealables.forEach(function (el) {
       el.classList.add("is-visible");
     });
   } else {
-    var revealObserver = new IntersectionObserver(
+    revealObserver = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
@@ -132,6 +131,26 @@
       revealObserver.observe(el);
     });
   }
+
+  /* Re-run the fade-in when the page is restored from the back/forward
+     cache (e.g. returning from a sample site), so it plays on every
+     visit, not just the first. */
+
+  window.addEventListener("pageshow", function (event) {
+    if (!event.persisted) return;
+    revealables.forEach(function (el) {
+      el.classList.remove("is-visible");
+    });
+    if (revealObserver) {
+      revealables.forEach(function (el) {
+        revealObserver.observe(el);
+      });
+    } else {
+      revealables.forEach(function (el) {
+        el.classList.add("is-visible");
+      });
+    }
+  });
 
   /* --- active nav link ------------------------------------------------- */
 
@@ -186,14 +205,20 @@
     });
   }
 
-  /* --- showcase: two-finger scroll stops the marquee ------------------- */
+  /* --- showcase: two-finger scroll pauses, then resumes seamlessly ----- */
 
   var showcase = document.querySelector(".showcase-wrap");
   if (showcase) {
+    var resumeTimer = null;
     showcase.addEventListener(
       "scroll",
       function () {
         showcase.classList.add("is-user-scrolled");
+        if (resumeTimer) window.clearTimeout(resumeTimer);
+        resumeTimer = window.setTimeout(function () {
+          resumeTimer = null;
+          showcase.classList.remove("is-user-scrolled");
+        }, 800);
       },
       { passive: true }
     );
