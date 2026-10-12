@@ -205,20 +205,48 @@
     });
   }
 
-  /* --- showcase: two-finger scroll pauses, then resumes seamlessly ----- */
+  /* --- showcase: auto-marquee; manual scroll loops forever too ----------- */
 
   var showcase = document.querySelector(".showcase-wrap");
   if (showcase) {
+    var sets = showcase.querySelectorAll(".showcase-set");
+    var period = 0;
+
+    function measurePeriod() {
+      period = sets.length > 1 ? sets[1].offsetLeft - sets[0].offsetLeft : 0;
+    }
+    measurePeriod();
+    window.addEventListener("load", measurePeriod);
+    window.addEventListener("resize", measurePeriod);
+
     var resumeTimer = null;
     showcase.addEventListener(
       "scroll",
       function () {
+        /* one set + gap is identical content — jump back a period seamlessly */
+        if (period > 0 && showcase.scrollLeft >= period) {
+          showcase.scrollLeft -= period;
+        }
         showcase.classList.add("is-user-scrolled");
         if (resumeTimer) window.clearTimeout(resumeTimer);
         resumeTimer = window.setTimeout(function () {
           resumeTimer = null;
           showcase.classList.remove("is-user-scrolled");
         }, 800);
+      },
+      { passive: true }
+    );
+
+    /* scrolling back past the start jumps to the twin copy so the
+       browser's own wheel delta then continues from there — no hard edge */
+    showcase.addEventListener(
+      "wheel",
+      function (event) {
+        if (period <= 0) return;
+        var goingBack = event.deltaX < 0 || (event.shiftKey && event.deltaY < 0);
+        if (goingBack && showcase.scrollLeft <= 0) {
+          showcase.scrollLeft = period;
+        }
       },
       { passive: true }
     );
